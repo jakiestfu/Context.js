@@ -1,6 +1,6 @@
 # Context.js
 
-<a href="http://contextjs.com/" target="_blank">Visit the Website, contextjs.com</a>
+<a href="http://lab.jakiestfu.com/contextjs/" target="_blank">Visit the Website, lab.jakiestfu.com/contextjs/</a>
 
 
 ## About
