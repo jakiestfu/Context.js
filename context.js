@@ -7,14 +7,16 @@
 var context = context || (function () {
     
 	var options = {
-		fadeSpeed: 100,
-		filter: function ($obj) {
-			// Modify $obj, Do not return
+			fadeSpeed: 100,
+			filter: function ($obj) {
+				// Modify $obj, Do not return
+			},
+			above: 'auto',
+			preventDoubleContext: true,
+			compress: false
 		},
-		above: 'auto',
-		preventDoubleContext: true,
-		compress: false
-	};
+		selectorToDropdownIdRefs = {};
+
 
 	function initialize(opts) {
 		
@@ -96,15 +98,16 @@ var context = context || (function () {
 			$menu = buildMenu(data, id);
 			
 		$('body').append($menu);
-		
+		if( $(selector) ) selectorToDropdownIdRefs[selector] = '#dropdown-' + id;
 		
 		$(document).on('contextmenu', selector, function (e) {
+			var $dd = $(selectorToDropdownIdRefs[selector]);
+
 			e.preventDefault();
 			e.stopPropagation();
 			
 			$('.dropdown-context:not(.dropdown-context-sub)').hide();
 			
-			$dd = $('#dropdown-' + id);
 			if (typeof options.above == 'boolean' && options.above) {
 				$dd.addClass('dropdown-context-up').css({
 					top: e.pageY - 20 - $('#dropdown-' + id).height(),
@@ -129,7 +132,15 @@ var context = context || (function () {
 	}
 	
 	function destroyContext(selector) {
-		$(document).off('contextmenu', selector).off('click', '.context-event');
+		if( selectorToDropdownIdRefs[selector] ) {
+	      $(document).off('contextmenu', selector).off('click', '.context-event');
+	      removeContextMenuFromDOM(selector);
+    	}
+	}
+
+	function removeContextMenuFromDOM(selector) {
+		$(selectorToDropdownIdRefs[selector]).remove();
+		delete selectorToDropdownIdRefs[selector];
 	}
 	
 	return {
