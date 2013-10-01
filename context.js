@@ -132,15 +132,11 @@ var context = context || (function () {
 	}
 	
 	function destroyContext(selector) {
-		if( hasContextMenuBound(selector) ) {
+		if( selectorToDropdownIdRefs[selector] ) {
 	      $(document).off('contextmenu', selector).off('click', '.context-event');
 	      removeContextMenuFromDOM(selector);
     	}
 	}
-
-	function hasContextMenuBound(selector) {
-    	return selectorToDropdownIdRefs[selector];
-  	}
 
 	function removeContextMenuFromDOM(selector) {
 		$(selectorToDropdownIdRefs[selector]).remove();
