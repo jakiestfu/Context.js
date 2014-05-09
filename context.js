@@ -76,7 +76,10 @@ var context = context || (function () {
 						eventAction = data[i].action;
 					$sub.find('a').attr('id', actionID);
 					$('#' + actionID).addClass('context-event');
-					$(document).on('click', '#' + actionID, eventAction);
+					action = function(event) {
+						eventAction(event, $menu.context);
+					}
+					$(document).on('click', '#' + actionID, action);
 				}
 				$menu.append($sub);
 				if (typeof data[i].subMenu != 'undefined') {
@@ -106,6 +109,7 @@ var context = context || (function () {
 		$(document).on('contextmenu', selector, function (e) {
 			e.preventDefault();
 			e.stopPropagation();
+			$menu.context = this;
 			
 			$('.dropdown-context:not(.dropdown-context-sub)').hide();
 			
