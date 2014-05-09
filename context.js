@@ -5,7 +5,7 @@
  */
 
 var context = context || (function () {
-    
+		
 	var options = {
 		fadeSpeed: 100,
 		filter: function ($obj) {
@@ -15,6 +15,8 @@ var context = context || (function () {
 		preventDoubleContext: true,
 		compress: false
 	};
+
+	var $menus = {};
 
 	function initialize(opts) {
 		
@@ -88,13 +90,16 @@ var context = context || (function () {
 		}
 		return $menu;
 	}
-
+	
 	function addContext(selector, data) {
 		
 		var d = new Date(),
 			id = d.getTime(),
 			$menu = buildMenu(data, id);
-			
+
+		this.$menus[selector] = this.$menus[selector]	|| [];
+		this.$menus[selector].push($menu);
+
 		$('body').append($menu);
 		
 		
@@ -127,15 +132,23 @@ var context = context || (function () {
 			}
 		});
 	}
-	
+
 	function destroyContext(selector) {
+		var i;
 		$(document).off('contextmenu', selector).off('click', '.context-event');
+		if (this.$menus[selector]) {
+			for (i = 0;	i < this.$menus[selector].length; i++) {
+				this.$menus[selector][i].remove()
+			}
+			this.$menus[selector] = []
+		}
 	}
 	
 	return {
 		init: initialize,
 		settings: updateOptions,
 		attach: addContext,
-		destroy: destroyContext
+		destroy: destroyContext,
+		$menus: $menus
 	};
 })();
