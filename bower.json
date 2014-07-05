@@ -1,0 +1,22 @@
+{
+	"name": "context",
+	"description": "Right click context menus with Bootstrap",
+	"version": "2.0.0",
+	"author": "Jacob Kelley <jakie8@gmail.com>",
+	"keywords": [
+		"context",
+		"menus",
+		"right",
+		"click"
+	],
+	"license": "MIT",
+	"main": [
+		"./dist/context.js",
+		"./dist/context.css"
+	],
+	"scripts": ["snap.js"],
+
+	"dependencies": {
+		"bootstrap": "3.2.0"
+	}
+}

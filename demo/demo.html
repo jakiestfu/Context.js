@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link type="text/css" rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+		<link type="text/css" rel="stylesheet" href="../dist/context.min.css">
+		<style type="text/css">
+			html, body{
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+		<script type="text/javascript" src="../dist/context.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+
+				var menu = new Context({
+					element: 'body'
+				}, [
+					{header: 'Options'},
+					{text: 'Open', href: '#'},
+					{text: 'Open in new Window', href: '#'},
+					{divider: true},
+					{text: 'Copy', href: '#'},
+					{text: 'Dafuq!?', href: '#'}
+				]);
+
+				/*context.init({preventDoubleContext: false});
+
+				context.attach('body', [
+					{header: 'Options'},
+					{text: 'Open', href: '#'},
+					{text: 'Open in new Window', href: '#'},
+					{divider: true},
+					{text: 'Copy', href: '#'},
+					{text: 'Dafuq!?', href: '#'}
+				]);*/
+
+
+			});
+		</script>
+	</body>
+</html>

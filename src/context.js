@@ -1,11 +1,5 @@
-/* 
- * Context.js
- * Copyright Jacob Kelley
- * MIT License
- */
-
 var context = context || (function () {
-    
+
 	var options = {
 		fadeSpeed: 100,
 		filter: function ($obj) {
@@ -17,9 +11,9 @@ var context = context || (function () {
 	};
 
 	function initialize(opts) {
-		
+
 		options = $.extend({}, options, opts);
-		
+
 		$(document).on('click', 'html', function () {
 			$('.dropdown-context').fadeOut(options.fadeSpeed, function(){
 				$('.dropdown-context').css({display:''}).find('.drop-left').removeClass('drop-left');
@@ -39,7 +33,7 @@ var context = context || (function () {
 				$sub.addClass('drop-left');
 			}
 		});
-		
+
 	}
 
 	function updateOptions(opts){
@@ -50,9 +44,9 @@ var context = context || (function () {
 		var subClass = (subMenu) ? ' dropdown-context-sub' : '',
 			compressed = options.compress ? ' compressed-context' : '',
 			$menu = $('<ul class="dropdown-menu dropdown-context' + subClass + compressed+'" id="dropdown-' + id + '"></ul>');
-        var i = 0, linkTarget = '';
-        for(i; i<data.length; i++) {
-        	if (typeof data[i].divider !== 'undefined') {
+		var i = 0, linkTarget = '';
+		for(i; i<data.length; i++) {
+			if (typeof data[i].divider !== 'undefined') {
 				$menu.append('<li class="divider"></li>');
 			} else if (typeof data[i].header !== 'undefined') {
 				$menu.append('<li class="nav-header">' + data[i].header + '</li>');
@@ -90,20 +84,20 @@ var context = context || (function () {
 	}
 
 	function addContext(selector, data) {
-		
+
 		var d = new Date(),
 			id = d.getTime(),
 			$menu = buildMenu(data, id);
-			
+
 		$('body').append($menu);
-		
-		
+
+
 		$(document).on('contextmenu', selector, function (e) {
 			e.preventDefault();
 			e.stopPropagation();
-			
+
 			$('.dropdown-context:not(.dropdown-context-sub)').hide();
-			
+
 			$dd = $('#dropdown-' + id);
 			if (typeof options.above == 'boolean' && options.above) {
 				$dd.addClass('dropdown-context-up').css({
@@ -127,11 +121,11 @@ var context = context || (function () {
 			}
 		});
 	}
-	
+
 	function destroyContext(selector) {
 		$(document).off('contextmenu', selector).off('click', '.context-event');
 	}
-	
+
 	return {
 		init: initialize,
 		settings: updateOptions,
@@ -139,3 +133,48 @@ var context = context || (function () {
 		destroy: destroyContext
 	};
 })();
+
+
+/**
+ * New Context.js, yo
+ */
+(function(w, d){
+
+	function Context(options, menu) {
+		var self = this,
+
+			// Ensure our element is a jQuery object
+			$el = (typeof options.element === "string" ? $(options.element) : (typeof options.element.removeClass !== "function" ? $(options.element) : options.element ));
+
+		var create = function(menu) {
+
+			var items = {
+				divider: function(){ return '<li class="divider"></li>'; },
+				header: function(data){ return '<li class="nav-header">'+data.header+'</li>'; }
+
+			};
+
+			var i;
+			for(i=0; i<menu.length; i++) {
+				var item = menu[i],
+					keys = Object.keys(items),
+					created = false;
+				while(!created) {
+
+				}
+			}
+
+			return menu;
+		};
+
+		var show = function(e){
+			console.log('Show', e, self.menu);
+		};
+
+		// Build Menu
+		self.menu = create(menu);
+		$el.on('contextmenu', show);
+	}
+
+	this.Context = Context;
+}).call(this, window, document);

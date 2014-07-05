@@ -7,7 +7,7 @@
 
 Context.js is a lightweight solution for contextual menus. Currently, there are two versions.
 
-The first is to be used <i>with</i> <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitters Bootstrap</a> (bootstrap.css specifically). If you do not use or want to use bootstrap.css, there is a standalone stylesheet to give the menu it's base styles.
+The first is to be used <i>with</i> <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitters Bootstrap</a> (bootstrap.css specifically). If you do not use or want to use bootstrap.css, there is a standalone stylesheet to giv2.0.0 the menu it's base styles.
 
 
 ## Features

@@ -1,0 +1,16 @@
+{
+  "name": "Context.js",
+  "version": "2.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jakiestfu/Context.js.git"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-cli": "~0.1.9",
+    "grunt-contrib-sass": "~0.5.0",
+    "grunt-contrib-uglify": "0.2.5",
+    "grunt-contrib-jshint": "0.8.0",
+    "grunt-contrib-watch": "~0.5.3"
+  }
+}
