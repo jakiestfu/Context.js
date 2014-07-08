@@ -91,8 +91,7 @@ var context = context || (function () {
 
 	function addContext(selector, data) {
 		
-		var d = new Date(),
-			id = d.getTime(),
+		var id = (Math.random() + 1).toString(36).substring(10),
 			$menu = buildMenu(data, id);
 			
 		$('body').append($menu);
