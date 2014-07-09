@@ -96,7 +96,10 @@ var context = context || (function () {
 			$menu = buildMenu(data, id);
 			
 		$('body').append($menu);
-		
+		// add an unique id for each element
+		$( selector ).each(function( index ) {
+			  $(this).attr("data-contextjs-id", Math.floor(Math.random()*100000));
+		});
 		
 		$(document).on('contextmenu', selector, function (e) {
 			e.preventDefault();
@@ -105,6 +108,8 @@ var context = context || (function () {
 			$('.dropdown-context:not(.dropdown-context-sub)').hide();
 			
 			$dd = $('#dropdown-' + id);
+			// provide caller id to the menu
+			$dd.attr("data-contextjs-callerid", $(this).attr('data-contextjs-id'));
 			if (typeof options.above == 'boolean' && options.above) {
 				$dd.addClass('dropdown-context-up').css({
 					top: e.pageY - 20 - $('#dropdown-' + id).height(),
