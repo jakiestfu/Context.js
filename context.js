@@ -21,8 +21,8 @@ var context = context || (function () {
 		options = $.extend({}, options, opts);
 		
 		$(document).on('click', 'html', function () {
-			$('.dropdown-context').fadeOut(options.fadeSpeed, function(){
-				$('.dropdown-context').css({display:''}).find('.drop-left').removeClass('drop-left');
+			$('.dropdown-context:visible').fadeOut(options.fadeSpeed, function(){
+				$('.dropdown-context:visible').css({display:''}).find('.drop-left').removeClass('drop-left');
 			});
 		});
 		if(options.preventDoubleContext){
