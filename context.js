@@ -98,7 +98,7 @@ var context = context || (function () {
 		$('body').append($menu);
 		
 		
-		$(document).on('contextmenu', selector, function (e) {
+		$(selector).on('contextmenu', function (e) {
 			e.preventDefault();
 			e.stopPropagation();
 			
