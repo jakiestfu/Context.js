@@ -5,7 +5,7 @@
  */
 
 var context = context || (function () {
-    
+
 	var options = {
 		fadeSpeed: 100,
 		filter: function ($obj) {
@@ -15,6 +15,14 @@ var context = context || (function () {
 		preventDoubleContext: true,
 		compress: false
 	};
+	
+    	function createElement(tag, attrs) {
+	    var el = document.createElement(tag);
+	    for (var prop in attrs) {
+	        el.setAttribute(prop, attrs[prop]);
+	    }
+	    return el;
+	}
 
 	function initialize(opts) {
 		
