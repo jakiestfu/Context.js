@@ -131,7 +131,7 @@ var context = context || (function () {
 		document.body.appendChild(menu);
 		
 		
-		$(selector).on('contextmenu', function (e) {
+		$(document).on('contextmenu', selector, function (e) {
 			e.preventDefault();
 			e.stopPropagation();
 			
