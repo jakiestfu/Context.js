@@ -5,7 +5,7 @@
  */
 
 var context = context || (function () {
-    
+
 	var options = {
 		fadeSpeed: 100,
 		filter: function ($obj) {
@@ -15,14 +15,22 @@ var context = context || (function () {
 		preventDoubleContext: true,
 		compress: false
 	};
+	
+    	function createElement(tag, attrs) {
+	    var el = document.createElement(tag);
+	    for (var prop in attrs) {
+	        el.setAttribute(prop, attrs[prop]);
+	    }
+	    return el;
+	}
 
 	function initialize(opts) {
 		
 		options = $.extend({}, options, opts);
 		
 		$(document).on('click', 'html', function () {
-			$('.dropdown-context').fadeOut(options.fadeSpeed, function(){
-				$('.dropdown-context').css({display:''}).find('.drop-left').removeClass('drop-left');
+			$('.dropdown-context:visible').fadeOut(options.fadeSpeed, function(){
+				$('.dropdown-context:visible').css({display:''}).find('.drop-left').removeClass('drop-left');
 			});
 		});
 		if(options.preventDoubleContext){
@@ -47,55 +55,80 @@ var context = context || (function () {
 	}
 
 	function buildMenu(data, id, subMenu) {
-		var subClass = (subMenu) ? ' dropdown-context-sub' : '',
-			compressed = options.compress ? ' compressed-context' : '',
-			$menu = $('<ul class="dropdown-menu dropdown-context' + subClass + compressed+'" id="dropdown-' + id + '"></ul>');
-        var i = 0, linkTarget = '';
-        for(i; i<data.length; i++) {
-        	if (typeof data[i].divider !== 'undefined') {
-				$menu.append('<li class="divider"></li>');
-			} else if (typeof data[i].header !== 'undefined') {
-				$menu.append('<li class="nav-header">' + data[i].header + '</li>');
-			} else {
-				if (typeof data[i].href == 'undefined') {
-					data[i].href = '#';
-				}
-				if (typeof data[i].target !== 'undefined') {
-					linkTarget = ' target="'+data[i].target+'"';
-				}
-				if (typeof data[i].subMenu !== 'undefined') {
-					$sub = ('<li class="dropdown-submenu"><a tabindex="-1" href="' + data[i].href + '">' + data[i].text + '</a></li>');
-				} else {
-					$sub = $('<li><a tabindex="-1" href="' + data[i].href + '"'+linkTarget+'>' + data[i].text + '</a></li>');
-				}
-				if (typeof data[i].action !== 'undefined') {
-					var actiond = new Date(),
-						actionID = 'event-' + actiond.getTime() * Math.floor(Math.random()*100000),
-						eventAction = data[i].action;
-					$sub.find('a').attr('id', actionID);
-					$('#' + actionID).addClass('context-event');
-					$(document).on('click', '#' + actionID, eventAction);
-				}
-				$menu.append($sub);
-				if (typeof data[i].subMenu != 'undefined') {
-					var subMenuData = buildMenu(data[i].subMenu, id, true);
-					$menu.find('li:last').append(subMenuData);
-				}
-			}
-			if (typeof options.filter == 'function') {
-				options.filter($menu.find('li:last'));
-			}
-		}
-		return $menu;
+        var subClass = (subMenu) ? ' dropdown-context-sub' : '',
+            compressed = options.compress ? ' compressed-context' : '',
+            sub = {};
+        var menu = createElement("ul", {
+            "class": "dropdown-menu dropdown-context" + subClass + compressed,
+                "id": "dropdown-" + id
+        });
+        var i = 0,
+            linkTarget = '';
+        for (i; i < data.length; i++) {
+            if (typeof data[i].divider !== 'undefined') {
+                menu.appendChild(createElement("li", {
+                    "class": "divider"
+                }));
+            } else if (typeof data[i].header !== 'undefined') {
+                var li = createElement("li", {
+                    "class": "nav-header"
+                });
+                menu.appendChild(li);
+                li.appendChild(document.createTextNode(data[i].header));
+        } else {
+            var attrs = {
+                "tabindex": "-1"
+            };
+            var a = {};
+            if (typeof data[i].href == 'undefined') {
+                data[i].href = '#';
+            }
+            attrs["href"] = data[i].href;
+            if (typeof data[i].target !== 'undefined') {
+                linkTarget = ' target="' + data[i].target + '"';
+                attrs["target"] = data[i].target;
+            }
+            if (typeof data[i].subMenu !== 'undefined') {
+                a = createElement("a", attrs);
+                a.appendChild(document.createTextNode(data[i].text));
+                sub = createElement("li", {
+                    "class": "dropdown-submenu"
+                });
+                sub.appendChild(a);
+            } else {
+                a = createElement("a", attrs);
+                a.appendChild(document.createTextNode(data[i].text));
+                sub = createElement("li", {});
+                sub.appendChild(a);
+            }
+            if (typeof data[i].action !== 'undefined') {
+                var actiond = new Date(),
+                    actionID = 'event-' + actiond.getTime() * Math.floor(Math.random() * 100000),
+                    eventAction = data[i].action;
+                a.setAttribute("id", actionID);
+                a.setAttribute(a.getAttribute("class") + " context-event");
+                a.onclick = eventAction;
+            }
+            menu.appendChild(sub);
+            if (typeof data[i].subMenu != 'undefined') {
+                var subMenuData = buildMenuFast(data[i].subMenu, id, true);
+                sub.appendChild(subMenuData);
+            }
+        }
+        if (typeof options.filter == 'function') {
+            options.filter(sub);
+        }
+    }
+    return menu;
 	}
 
 	function addContext(selector, data) {
 		
 		var d = new Date(),
 			id = d.getTime(),
-			$menu = buildMenu(data, id);
+			menu = buildMenu(data, id);
 			
-		$('body').append($menu);
+		document.body.appendChild(menu);
 		
 		
 		$(document).on('contextmenu', selector, function (e) {
