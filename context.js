@@ -4,7 +4,7 @@
  * MIT License
  */
 
-var context = context || (function () {
+var context = context || (function ($) {
 
 	var options = {
 		fadeSpeed: 100,
@@ -137,4 +137,4 @@ var context = context || (function () {
 		attach: addContext,
 		destroy: destroyContext
 	};
-})();
+})(jQuery);
