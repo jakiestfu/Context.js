@@ -46,6 +46,10 @@ var context = context || (function () {
 		options = $.extend({}, options, opts);
 	}
 
+	function getTriggerer(){
+		return (typeof options.selection !== 'undefined' ? options.selection : '');
+	}
+
 	function buildMenu(data, id, subMenu) {
 		var subClass = (subMenu) ? ' dropdown-context-sub' : '',
 			compressed = options.compress ? ' compressed-context' : '',
@@ -73,7 +77,7 @@ var context = context || (function () {
 					$sub
 						.find('a')
 						.addClass('context-event')
-						.on('click', data[i].action);
+						.on('click',{selection:getTriggerer} ,data[i].action);
 				}
 				$menu.append($sub);
 				if (typeof data[i].subMenu != 'undefined') {
@@ -98,6 +102,7 @@ var context = context || (function () {
 
 
 		$(document).on('contextmenu', selector, function (e) {
+			options.selection = e.target;
 			e.preventDefault();
 			e.stopPropagation();
 
@@ -135,6 +140,7 @@ var context = context || (function () {
 		init: initialize,
 		settings: updateOptions,
 		attach: addContext,
-		destroy: destroyContext
+		destroy: destroyContext,
+		selection:getTriggerer
 	};
 })();
