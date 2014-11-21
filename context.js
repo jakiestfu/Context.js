@@ -49,15 +49,15 @@ context = (function () {
 		options = $.extend({}, options, opts);
 	}
 
-	function buildMenu(data, id, selector, subMenu) {
+	function buildMenu(data, id, subMenu) {
 		var subClass = (subMenu) ? ' dropdown-context-sub' : '',
 			compressed = options.compress ? ' compressed-context' : '',
 			$menu = $('<ul class="dropdown-menu dropdown-context' + subClass + compressed +'" id="dropdown-' + id + '"></ul>');
         
-        return buildMenuItems($menu, data, id, selector, subMenu);
+        return buildMenuItems($menu, data, id, subMenu);
 	}
 
-    function buildMenuItems($menu, data, id, selector, subMenu, addDynamicTag) {
+    function buildMenuItems($menu, data, id, subMenu, addDynamicTag) {
 	    var linkTarget = '';
         for(var i = 0; i<data.length; i++) {
         	if (typeof data[i].divider !== 'undefined') {
@@ -113,11 +113,11 @@ context = (function () {
 					$sub
 						.find('a')
 						.addClass('context-event')
-						.on('click', createCallback($action, selector));
+						.on('click', createCallback($action));
 				}
 				$menu.append($sub);
 				if (typeof data[i].subMenu != 'undefined') {
-					var subMenuData = buildMenu(data[i].subMenu, id, selector, true);
+					var subMenuData = buildMenu(data[i].subMenu, id, true);
 					$menu.find('li:last').append(subMenuData);
 				}
 			}
@@ -133,19 +133,21 @@ context = (function () {
             var id = data.id;
             $menu = $('body').find('#dropdown-' + id)[0];
             if (typeof $menu === 'undefined') {
-                $menu = buildMenu(data.data, id, $(selector));
+                $menu = buildMenu(data.data, id);
                 $('body').append($menu);
             }
         } else {
             var d = new Date(),
                 id = d.getTime(),
-                $menu = buildMenu(data, id, $(selector));
+                $menu = buildMenu(data, id);
                 $('body').append($menu);
         }
 
 		$(selector).on('contextmenu', function (e) {
 			e.preventDefault();
 			e.stopPropagation();
+
+            currentContextSelector = $(this);
 
 			$('.dropdown-context:not(.dropdown-context-sub)').hide();
 
@@ -155,7 +157,7 @@ context = (function () {
             $dd.find('.dynamic-menu-src').each(function(idx, element) {
                 var menuItems = window[$(element).data('src')]($(selector));
                 $parentMenu = $(element).closest('.dropdown-menu.dropdown-context');
-                $parentMenu = buildMenuItems($parentMenu, menuItems, id, $(selector), undefined, true);
+                $parentMenu = buildMenuItems($parentMenu, menuItems, id, undefined, true);
             });
 
 			if (typeof options.above == 'boolean' && options.above) {
@@ -207,6 +209,8 @@ context = (function () {
 	};
 })();
 
-var createCallback = function(func, selector) {
-    return function(event) { func(event, selector) };
+var createCallback = function(func) {
+    return function(event) { func(event, currentContextSelector) };
 }
+
+currentContextSelector = undefined;
