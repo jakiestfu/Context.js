@@ -8,17 +8,6 @@
   "description": "ContextJS is a lightweight solution for contextual menus.",
   "main": "context.js",
   "keywords": [
-    "\"context",
-    "menu\"",
-    "\"bootstrap",
-    "context",
-    "menu\"",
-    "\"jquery",
-    "context",
-    "menu\"",
-    "\"javascript",
-    "context",
-    "menu\""
   ],
   "license": "MIT"
 }
