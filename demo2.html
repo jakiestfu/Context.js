@@ -26,14 +26,22 @@
                 This will have no options in the dynamic menu.
             </div>
         </div>
-        <div id="notDynamic" style="position: absolute; top: 50%; left: 0; height: 50%; width: 100%; background: yellow;">
+        <div id="notDynamic" style="position: absolute; top: 50%; left: 0; height: 50%; width: 50%; background: yellow;">
             Right click here is not dynamic.
+        </div>
+
+        <div id="delegateClick" style="position: absolute; top: 50%; left: 50%; height: 50%; width: 50%; background: grey;">
         </div>
         <script>
             context.init({preventDoubleContext: false});
             context.attach('#PNG_JPG', test_menu);
             context.attach('#NO_OPTIONS', test_menu);
             context.attach('#notDynamic', test_menu2);
+
+            var $delegateTestNode = $("#delegateClick");
+            context.attachDelegate($delegateTestNode, '.dynamic', test_menu);
+
+            $delegateTestNode.append("<div class='dynamic'>Dynamic Test</div>");
         </script>
     </body>
 </html>

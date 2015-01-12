@@ -129,84 +129,115 @@ context = (function() {
 		return $menu;
 	}
 
-	function addContext(selector, data) {
+	function _contextHandler(e, id, $target) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		currentContextSelector = $(e.target);
+
+		$('.dropdown-context:not(.dropdown-context-sub)').hide();
+
+		$dd = $('#dropdown-' + id);
+
+		$dd.find('.dynamic-menu-item').remove(); // Destroy any old dynamic menu items
+		$dd.find('.dynamic-menu-src').each(function(idx, element) {
+			var menuItems = window[$(element).data('src')]($target);
+			$parentMenu = $(element).closest('.dropdown-menu.dropdown-context');
+			$parentMenu = buildMenuItems($parentMenu, menuItems, id, undefined, true);
+		});
+
+		if (typeof options.above == 'boolean' && options.above) {
+			$dd.addClass('dropdown-context-up').css({
+				top: e.pageY - 20 - $('#dropdown-' + id).height(),
+				left: e.pageX - 13
+			}).fadeIn(options.fadeSpeed);
+		} else if (typeof options.above == 'string' && options.above == 'auto') {
+			$dd.removeClass('dropdown-context-up');
+			var autoH = $dd.height() + 12;
+			if ((e.pageY + autoH) > $('html').height()) {
+				$dd.addClass('dropdown-context-up').css({
+					top: e.pageY - 20 - autoH,
+					left: e.pageX - 13
+				}).fadeIn(options.fadeSpeed);
+			} else {
+				$dd.css({
+					top: e.pageY + 10,
+					left: e.pageX - 13
+				}).fadeIn(options.fadeSpeed);
+			}
+		}
+
+		if (typeof options.left == 'boolean' && options.left) {
+			$dd.addClass('dropdown-context-left').css({
+				left: e.pageX - $dd.width()
+			}).fadeIn(options.fadeSpeed);
+		} else if (typeof options.left == 'string' && options.left == 'auto') {
+			$dd.removeClass('dropdown-context-left');
+			var autoL = $dd.width() - 12;
+			if ((e.pageX + autoL) > $('html').width()) {
+				$dd.addClass('dropdown-context-left').css({
+					left: e.pageX - $dd.width() + 13
+				});
+			}
+		}
+	}
+
+	function _setupMenu(data) {
+		var id;
+
 		if (typeof data.id !== 'undefined' && typeof data.data !== 'undefined') {
-			var id = data.id;
+			id = data.id;
 			$menu = $('body').find('#dropdown-' + id)[0];
 			if (typeof $menu === 'undefined') {
 				$menu = buildMenu(data.data, id);
 				$('body').append($menu);
 			}
 		} else {
-			var d = new Date(),
-				id = d.getTime(),
-				$menu = buildMenu(data, id);
-			$('body').append($menu);
+			id = (new Date()).getTime();
+
+			$('body').append(buildMenu(data, id));
 		}
 
-		$(selector).on('contextmenu', function(e) {
-			e.preventDefault();
-			e.stopPropagation();
+		return id;
+	}
 
-			currentContextSelector = $(this);
+	function _contextHandlerWrapper(id, $target) {
+		return function(e) {
+			_contextHandler(e, id, $target);
+		}
+	}
 
-			$('.dropdown-context:not(.dropdown-context-sub)').hide();
+	function addContext(selector, data) {
+		var $target = $(selector);
+		$target.on('contextmenu', 
+				_contextHandlerWrapper(_setupMenu(data), $target));
+	}
 
-			$dd = $('#dropdown-' + id);
+	function addContextDelegate(el, selector, data) {
+		var $el = (el instanceof jQuery) ? el : $(el);
 
-			$dd.find('.dynamic-menu-item').remove(); // Destroy any old dynamic menu items
-			$dd.find('.dynamic-menu-src').each(function(idx, element) {
-				var menuItems = window[$(element).data('src')]($(selector));
-				$parentMenu = $(element).closest('.dropdown-menu.dropdown-context');
-				$parentMenu = buildMenuItems($parentMenu, menuItems, id, undefined, true);
-			});
-
-			if (typeof options.above == 'boolean' && options.above) {
-				$dd.addClass('dropdown-context-up').css({
-					top: e.pageY - 20 - $('#dropdown-' + id).height(),
-					left: e.pageX - 13
-				}).fadeIn(options.fadeSpeed);
-			} else if (typeof options.above == 'string' && options.above == 'auto') {
-				$dd.removeClass('dropdown-context-up');
-				var autoH = $dd.height() + 12;
-				if ((e.pageY + autoH) > $('html').height()) {
-					$dd.addClass('dropdown-context-up').css({
-						top: e.pageY - 20 - autoH,
-						left: e.pageX - 13
-					}).fadeIn(options.fadeSpeed);
-				} else {
-					$dd.css({
-						top: e.pageY + 10,
-						left: e.pageX - 13
-					}).fadeIn(options.fadeSpeed);
-				}
-			}
-
-			if (typeof options.left == 'boolean' && options.left) {
-				$dd.addClass('dropdown-context-left').css({
-					left: e.pageX - $dd.width()
-				}).fadeIn(options.fadeSpeed);
-			} else if (typeof options.left == 'string' && options.left == 'auto') {
-				$dd.removeClass('dropdown-context-left');
-				var autoL = $dd.width() - 12;
-				if ((e.pageX + autoL) > $('html').width()) {
-					$dd.addClass('dropdown-context-left').css({
-						left: e.pageX - $dd.width() + 13
-					});
-				}
-			}
-		});
+		$el.on('contextmenu', selector, 
+				_contextHandlerWrapper(_setupMenu(data), $el.find(selector)));
 	}
 
 	function destroyContext(selector) {
 		$(document).off('contextmenu', selector).off('click', '.context-event');
 	}
 
+	function destroyContextDelegate(el, selector) {
+		var $el = (el instanceof jQuery) ? el : $(el);
+
+		$el.off('contextmenu', selector);
+		$(document).off('click', '.context-event');
+	}
+
 	return {
 		init: initialize,
 		settings: updateOptions,
 		attach: addContext,
-		destroy: destroyContext
+		attachDelegate: addContextDelegate,
+		destroy: destroyContext,
+		destroyDelegate: destroyContextDelegate
 	};
 })();
 
