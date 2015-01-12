@@ -47,10 +47,7 @@ test_menu = {
         {
             icon: 'glyphicon-plus',
             text: 'Create',
-            action: function(e, selector) { 
-                debugger;
-                alert('Create clicked on ' + selector.prop("tagName") + ":" + selector.attr("id")); 
-            }
+            action: function(e, selector) { alert('Create clicked on ' + selector.prop("tagName") + ":" + selector.attr("id")); }
         },
         {
             icon: 'glyphicon-edit',
