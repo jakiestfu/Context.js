@@ -153,8 +153,8 @@ context = (function() {
 			}).fadeIn(options.fadeSpeed);
 		} else if (typeof options.above == 'string' && options.above == 'auto') {
 			$dd.removeClass('dropdown-context-up');
-			var autoH = $dd.height() + 12;
-			if ((e.pageY + autoH) > $('html').height()) {
+			var autoH = $dd.height() + 30;
+			if ((e.pageY + autoH - $(window).scrollTop()) > $(window).height()) {
 				$dd.addClass('dropdown-context-up').css({
 					top: e.pageY - 20 - autoH,
 					left: e.pageX - 13
