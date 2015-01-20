@@ -1,0 +1,22 @@
+{
+  "name": "Context.js",
+  "version": "2.0.0",
+  "homepage": "http://lab.jakiestfu.com/contextjs/",
+  "authors": [
+    "Jacob Kelley <jakie8@gmail.com>"
+  ],
+  "description": "Context.js is a lightweight solution for contextual menus.",
+  "main": "context.js",
+  "keywords": [
+    "contextmenu",
+    "bootstrap"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
