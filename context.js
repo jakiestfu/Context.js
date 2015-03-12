@@ -16,7 +16,8 @@ context = (function () {
 		above: 'auto',
         left: 'auto',
 		preventDoubleContext: true,
-		compress: false
+		compress: false,
+		container: 'body'
 	};
 
 	function initialize(opts) {
@@ -131,16 +132,16 @@ context = (function () {
 	function addContext(selector, data) {
         if (typeof data.id !== 'undefined' && typeof data.data !== 'undefined') {
             var id = data.id;
-            $menu = $('body').find('#dropdown-' + id)[0];
+            $menu = $(options.container).find('#dropdown-' + id)[0];
             if (typeof $menu === 'undefined') {
                 $menu = buildMenu(data.data, id);
-                $('body').append($menu);
+                $(options.container).append($menu);
             }
         } else {
             var d = new Date(),
                 id = d.getTime(),
                 $menu = buildMenu(data, id);
-                $('body').append($menu);
+                $(options.container).append($menu);
         }
 
 		$(selector).on('contextmenu', function (e) {
