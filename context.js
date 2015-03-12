@@ -104,7 +104,7 @@ context = (function () {
                     element += (addDynamicTag) ? ' class="dynamic-menu-item"' : '';
                     element += '><a tabindex="-1" href="' + data[i].href + '"'+linkTarget+'>';
                     if (typeof data[i].icon !== 'undefined')
-                        element += '<span class="glyphicon ' + data[i].icon + '"></span> ';
+                        element += '<span class="' + data[i].icon + '"></span> ';
                     element += data[i].text + '</a></li>';
 					$sub = $(element);
 				}
