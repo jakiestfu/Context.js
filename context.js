@@ -99,7 +99,7 @@ $menu.append('<li class="dynamic-menu-src" data-src="' + funcName + '"></li>');
         var sub_menu = '<li class="dropdown-submenu';
         sub_menu += (addDynamicTag) ? ' dynamic-menu-item' : '';
         sub_menu += '"><a tabindex="-1" href="' + data[i].href + '">' + data[i].text + '</a></li>'
-        $sub = (sub_menu);
+        $sub = $(sub_menu);
     } else {
         var element = '<li';
         element += (addDynamicTag) ? ' class="dynamic-menu-item"' : '';
