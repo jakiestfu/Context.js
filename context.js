@@ -98,7 +98,10 @@ $menu.append('<li class="dynamic-menu-src" data-src="' + funcName + '"></li>');
     if (typeof data[i].subMenu !== 'undefined') {
         var sub_menu = '<li class="dropdown-submenu';
         sub_menu += (addDynamicTag) ? ' dynamic-menu-item' : '';
-        sub_menu += '"><a tabindex="-1" href="' + data[i].href + '">' + data[i].text + '</a></li>'
+        sub_menu += '"><a tabindex="-1" href="' + data[i].href + '">'
+        if (typeof data[i].icon !== 'undefined')
+            sub_menu += '<span class="' + data[i].icon + '"></span> ';
+        sub_menu += data[i].text + '</a></li>'
         $sub = $(sub_menu);
     } else {
         var element = '<li';
