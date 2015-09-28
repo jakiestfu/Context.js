@@ -165,6 +165,11 @@ context = (function () {
 					top: e.pageY - 20 - $('#dropdown-' + id).height(),
 					left: e.pageX - 13
 				}).fadeIn(options.fadeSpeed);
+			} else if (typeof options.above == 'boolean' && !options.above){
+				$dd.css({
+					top: e.pageY + 10,
+					left: e.pageX - 13
+				}).fadeIn(options.fadeSpeed);
 			} else if (typeof options.above == 'string' && options.above == 'auto') {
 				$dd.removeClass('dropdown-context-up');
 				var autoH = $dd.height() + 12;
