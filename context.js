@@ -16,7 +16,8 @@ context = (function () {
 		above: 'auto',
         left: 'auto',
 		preventDoubleContext: true,
-		compress: false
+		compress: false,
+        identifier: 'custom-dropdown-context'
 	};
 
 	function initialize(opts) {
@@ -52,7 +53,7 @@ context = (function () {
 	function buildMenu(data, id, subMenu) {
 		var subClass = (subMenu) ? ' dropdown-context-sub' : '',
 			compressed = options.compress ? ' compressed-context' : '',
-			$menu = $('<ul class="dropdown-menu dropdown-context' + subClass + compressed +'" id="dropdown-' + id + '"></ul>');
+			$menu = (subMenu) ? $('<ul class="dropdown-menu dropdown-context' + subClass + compressed +'" id="dropdown-' + id + '"></ul>') : $('<ul data-identifier="'+options.identifier+'" class="dropdown-menu dropdown-context' + subClass + compressed +'" id="dropdown-' + id + '"></ul>');
         
         return buildMenuItems($menu, data, id, subMenu);
 	}
@@ -60,6 +61,7 @@ context = (function () {
     function buildMenuItems($menu, data, id, subMenu, addDynamicTag) {
 	    var linkTarget = '';
         for(var i = 0; i<data.length; i++) {
+            var linkClass = '', linkID = '', triggerModal = '';
         	if (typeof data[i].divider !== 'undefined') {
                 var divider = '<li class="divider';
                 divider += (addDynamicTag) ? ' dynamic-menu-item' : '';
@@ -94,15 +96,24 @@ context = (function () {
 				if (typeof data[i].target !== 'undefined') {
 					linkTarget = ' target="'+data[i].target+'"';
 				}
+                if (typeof data[i].class !== 'undefined') {
+                    linkClass = ' class="'+data[i].class+'" ';
+                }
+                if (typeof data[i].id !== 'undefined') {
+                    linkID = ' id="#'+data[i].id+'" ';
+                }
+                if (typeof data[i].triggerModal !== 'undefined') {
+                    triggerModal = ' data-toggle="modal" data-target="#'+data[i].triggerModal+'" ';
+                }
 				if (typeof data[i].subMenu !== 'undefined') {
                     var sub_menu = '<li class="dropdown-submenu';
                     sub_menu += (addDynamicTag) ? ' dynamic-menu-item' : '';
-                    sub_menu += '"><a tabindex="-1" href="' + data[i].href + '">' + data[i].text + '</a></li>'
+                    sub_menu += '"><a '+linkClass+' '+linkID+' '+triggerModal+' tabindex="-1" href="' + data[i].href + '">' + data[i].text + '</a></li>'
 					$sub = (sub_menu);
 				} else {
                     var element = '<li';
                     element += (addDynamicTag) ? ' class="dynamic-menu-item"' : '';
-                    element += '><a tabindex="-1" href="' + data[i].href + '"'+linkTarget+'>';
+                    element += '><a '+linkClass+' '+linkID+' '+triggerModal+' tabindex="-1" href="' + data[i].href + '"'+linkTarget+'>';
                     if (typeof data[i].icon !== 'undefined')
                         element += '<span class="glyphicon ' + data[i].icon + '"></span> ';
                     element += data[i].text + '</a></li>';
