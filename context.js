@@ -53,7 +53,7 @@ context = (function () {
 	function buildMenu(data, id, subMenu) {
 		var subClass = (subMenu) ? ' dropdown-context-sub' : '',
 			compressed = options.compress ? ' compressed-context' : '',
-			$menu = $('<ul data-identifier="'+options.identifier+'" class="dropdown-menu dropdown-context' + subClass + compressed +'" id="dropdown-' + id + '"></ul>');
+			$menu = (subMenu) ? $('<ul class="dropdown-menu dropdown-context' + subClass + compressed +'" id="dropdown-' + id + '"></ul>') : $('<ul data-identifier="'+options.identifier+'" class="dropdown-menu dropdown-context' + subClass + compressed +'" id="dropdown-' + id + '"></ul>');
         
         return buildMenuItems($menu, data, id, subMenu);
 	}
