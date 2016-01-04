@@ -15,7 +15,7 @@ The first is to be used <i>with</i> <a href="http://twitter.github.com/bootstrap
 <ul>
 	<li>Linted: Valid JS</li>
 	<li>Can be used with or without Twitters Bootstrap.css</li>
-    <li>Icon support for menu items with Twitter Bootstrap icons</li>
+    <li>Icon support for menu items with Twitter Bootstrap icons, and jquery ui-icons</li>
 	<li>Event Based Links</li>
 	<li>Anchor Links</li>
 	<li>Headers</li>
@@ -26,4 +26,6 @@ The first is to be used <i>with</i> <a href="http://twitter.github.com/bootstrap
 	<li>Add/Delete menus Dynamically</li>
 	<li>Even works on <a href="http://google.com" class="inline-menu">Inline Links</a></li>
     <li>Dynamic menu items through callbacks during menu creation</li>
+    <li>Lets you declare a callback to be triggered, before menu opens</li>
+    <li>Lets you pick between left and right click to use as your menu trigger</li>
 </ul>
