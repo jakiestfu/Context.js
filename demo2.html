@@ -30,10 +30,9 @@
             Right click here is not dynamic.
         </div>
         <script>
-            context.init({preventDoubleContext: false});
-            context.attach('#PNG_JPG', test_menu);
-            context.attach('#NO_OPTIONS', test_menu);
-            context.attach('#notDynamic', test_menu2);
+            $.contextmenu('#PNG_JPG', test_menu, {trigger: 'left'});
+            $.contextmenu('#NO_OPTIONS', test_menu, {trigger: 'right'});
+            $.contextmenu('#notDynamic', test_menu2, {trigger: 'right', onMenu: function(){alert('this is a onMenu warning')}});
         </script>
     </body>
 </html>

@@ -1,8 +1,6 @@
 $(document).ready(function(){
 
-	context.init({preventDoubleContext: false});
-
-	context.attach('body', [
+	$.contextmenu('body', [
 
 		{header: 'Download'},
 		{text: 'The Script', subMenu: [
@@ -54,6 +52,6 @@ $(document).ready(function(){
 				]}
 			]}
 		]}
-	]);
+	], {preventDoubleContext: false, trigger:'right'});
 
 });

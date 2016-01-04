@@ -6,37 +6,44 @@ exampleMenuItemSource = function (selector) {
                 },
                 {
                     text: 'PNG',
-                    action: function(e, selector) { alert('PNG clicked on ' + selector.prop("tagName") + ":" + selector.attr("id")); }
+                    id: 'pngid',
+                    action: function(e, selector) { alert('PNG clicked on ' + selector.text + ": " + selector.id); }
                 },
                 {
                     text: 'JPG',
-                    action: function(e, selector) { alert('JPG clicked on ' + selector.prop("tagName") + ":" + selector.attr("id")); }
+                    id: 'jpfid',
+                    action: function(e, selector) { alert('JPG clicked on ' + selector.text + ": " + selector.id); }
                 },
                 {   divider: true   },
                 {
-                    icon: 'glyphicon-list-alt',
+                    icon: 'glyphicon glyphicon-list-alt',
                     text: 'Dynamic nested',
                     subMenu : [
                     {
                         text: 'More dynamic',
-                        action: function(e, selector) { alert('More dynamic clicked on ' + selector.prop("tagName") + ":" + selector.attr("id")); }
+                        id: 'moreid',
+                        action: function(e, selector) { 
+                          alert('More dynamic clicked on ' + selector.text + ": " + selector.id); 
+                        }
                     },
                     {
                         text: 'And more...',
-                        action: function(e, selector) { alert('And more... clicked on ' + selector.prop("tagName") + ":" + selector.attr("id")); }
+                        id: 'andmoreid',
+                        action: function(e, selector) { alert('And more... clicked on ' + selector.text + ": " + selector.id); }
                     }
                     ]
                 }
-            ]
+            ];
     } else {
         return [
                 {
-                    icon: 'glyphicon-exclamation-sign',
-                    text: 'No image types supported!'
+                    icon: 'glyphicon glyphicon-exclamation-sign',
+                    text: 'No image types supported!',
+                    id: 'noimageid'
                 }
-            ]
+            ];
     }
-}
+};
 
 test_menu = {
     id: 'TEST-MENU',
@@ -45,28 +52,33 @@ test_menu = {
             header: 'Example'
         },
         {
-            icon: 'glyphicon-plus',
-            text: 'Create',
-            action: function(e, selector) { alert('Create clicked on ' + selector.prop("tagName") + ":" + selector.attr("id")); }
+            'icon': 'ui-icon ui-icon-plus',
+            'text': 'Create',
+            'id': 'createid',
+            'action': function(e, selector) { 
+              alert('Create clicked on ' + selector.text + ": " + selector.id);
+              }
         },
         {
-            icon: 'glyphicon-edit',
+            icon: 'ui-icon ui-icon-pencil',
             text: 'Edit',
-            action: function(e, selector) { alert('Edit clicked on ' + selector.prop("tagName") + ":" + selector.attr("id")); }
+            id: 'editid',
+            action: function(e, selector) { alert('Edit clicked on '+ selector.text + ": " + selector.id); }
         },
         {
-            icon: 'glyphicon-list-alt',
+            icon: 'ui-icon ui-icon-arrowthick-1-n',
             text: 'View Data As:',
             subMenu : [
             {
                 text: 'Text',
-                action: function(e, selector) { alert('Text clicked on ' + selector.prop("tagName") + ":" + selector.attr("id")); }
+                id:'textid',
+                action: function(e, selector) { alert('Text clicked on ' + selector.text + ": " + selector.id); }
             },
             {
                 text: 'Image',
                 subMenu: [
                     {
-                        menu_item_src : exampleMenuItemSource
+                        menu_item_src : "exampleMenuItemSource"
                     }
                 ]
             }
@@ -79,25 +91,29 @@ test_menu = {
             header: 'Another Example'
         },
         {
-            icon: 'glyphicon-trash',
+            icon: 'ui-icon ui-icon-arrowthick-1-n',
             text: 'Delete',
-            action: function(e, selector) { alert('Delete clicked on ' + selector.prop("tagName") + ":" + selector.attr("id")); }
+            id:'deleteid',
+            action: function(e, selector) { 
+              alert('Delete clicked on ' + selector.text + ": " + selector.id);
+            }
         }
     ]
 };
 
 test_menu2 = [
     {
-        header: 'Example'
-    },
-    {
-        icon: 'glyphicon-plus',
+        icon: 'glyphicon glyphicon-plus',
         text: 'Create',
-        action: function(e, selector) { alert('Create clicked on ' + selector.prop("tagName") + ":" + selector.attr("id")); }
+        id: 'create2id',
+        action: function(e, selector) { alert('Create clicked on ' + selector.text + ":" + selector.id); }
     },
     {
-        icon: 'glyphicon-edit',
+        icon: 'glyphicon glyphicon-edit',
         text: 'Edit',
-        action: function(e, selector) { alert('Edit clicked on ' + selector.prop("tagName") + ":" + selector.attr("id")); }
+        id:'edit2id',
+        action: function(e, selector) { 
+          alert('Edit clicked on ' + selector.text + ":" + selector.id); 
+        }
     }
 ];

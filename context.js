@@ -2,25 +2,35 @@
  * Context.js
  * Copyright Jacob Kelley
  * MIT License
- *
- * Modified by Joshua Christman
+ * repo: https://github.com/jakiestfu/Context.js
+ * Modified by Joshua Christman and Oscar Menendez
  */
 
-context = (function () {
+(function(){
+  $.contextmenu = function(selector, menu, opts) {
 
+  //var testThis = $(this);
+  
 	var options = {
 		fadeSpeed: 100,
 		filter: function ($obj) {
 			// Modify $obj, Do not return
 		},
 		above: 'auto',
-        left: 'auto',
+    left: 'auto',
 		preventDoubleContext: true,
 		compress: false
 	};
+	
+	var hash = {};
+	hash.trigger = 'contextmenu';
+	
+	this.init = function(opts) {
+	  
+    hash.trigger = (opts.trigger === 'left')? 'click': 'contextmenu';
 
-	function initialize(opts) {
-
+    hash.onMenu = opts.onMenu;
+      
 		options = $.extend({}, options, opts);
 
 		$(document).on('click', function () {
@@ -43,10 +53,14 @@ context = (function () {
 			}
 		});
 
-	}
+	};
 
 	function updateOptions(opts){
 		options = $.extend({}, options, opts);
+		
+    this.hash.trigger = (opts.trigger === 'left')? 'click': 'contextmenu';
+
+    this.hash.onMenu = (opts.onMenu !== undefined)? opts.onMenu: undefined;
 	}
 
 	function buildMenu(data, id, subMenu) {
@@ -97,14 +111,20 @@ context = (function () {
 				if (typeof data[i].subMenu !== 'undefined') {
                     var sub_menu = '<li class="dropdown-submenu';
                     sub_menu += (addDynamicTag) ? ' dynamic-menu-item' : '';
-                    sub_menu += '"><a tabindex="-1" href="' + data[i].href + '">' + data[i].text + '</a></li>'
+                    sub_menu += '"><a tabindex="-1" href="' + data[i].href + '">' + data[i].text + '</a></li>';
 					$sub = (sub_menu);
 				} else {
                     var element = '<li';
                     element += (addDynamicTag) ? ' class="dynamic-menu-item"' : '';
-                    element += '><a tabindex="-1" href="' + data[i].href + '"'+linkTarget+'>';
+                    if(data[i].id !== undefined){
+                      element += '><a id="' + data[i].id + '" tabindex="-1" href="' + data[i].href + '"'+linkTarget+'>';
+                    }
+                    else{
+                      element += '><a tabindex="-1" href="' + data[i].href + '"'+linkTarget+'>';
+                    }
+                    
                     if (typeof data[i].icon !== 'undefined')
-                        element += '<span class="glyphicon ' + data[i].icon + '"></span> ';
+                        element += '<span class="' + data[i].icon + '"></span>';
                     element += data[i].text + '</a></li>';
 					$sub = $(element);
 				}
@@ -128,7 +148,7 @@ context = (function () {
         return $menu;
     }
 
-	function addContext(selector, data) {
+	this.attach = function(selector, data) {
         if (typeof data.id !== 'undefined' && typeof data.data !== 'undefined') {
             var id = data.id;
             $menu = $('body').find('#dropdown-' + id)[0];
@@ -143,11 +163,15 @@ context = (function () {
                 $('body').append($menu);
         }
 
-		$(selector).on('contextmenu', function (e) {
+		$(selector).on(hash.trigger, function (e) {
 			e.preventDefault();
 			e.stopPropagation();
 
-            currentContextSelector = $(this);
+      currentContextSelector = $(this);
+      
+      if(hash.onMenu !== undefined){ 
+          hash.onMenu(e);
+      }
 
 			$('.dropdown-context:not(.dropdown-context-sub)').hide();
 
@@ -155,23 +179,23 @@ context = (function () {
 
             $dd.find('.dynamic-menu-item').remove(); // Destroy any old dynamic menu items
             $dd.find('.dynamic-menu-src').each(function(idx, element) {
-                var menuItems = window[$(element).data('src')]($(selector));
+                var menuItems = window[$(element).attr('data-src')]($(selector));
                 $parentMenu = $(element).closest('.dropdown-menu.dropdown-context');
                 $parentMenu = buildMenuItems($parentMenu, menuItems, id, undefined, true);
             });
 
 			if (typeof options.above == 'boolean' && options.above) {
 				$dd.addClass('dropdown-context-up').css({
-					top: e.pageY - 20 - $('#dropdown-' + id).height(),
-					left: e.pageX - 13
+					top: e.pageY - $('#dropdown-' + id).height(),
+					left: e.pageX
 				}).fadeIn(options.fadeSpeed);
 			} else if (typeof options.above == 'string' && options.above == 'auto') {
 				$dd.removeClass('dropdown-context-up');
 				var autoH = $dd.height() + 12;
-				if ((e.pageY + autoH) > $('html').height()) {
+				if ((e.pageY + autoH) > $(window).height()) {
 					$dd.addClass('dropdown-context-up').css({
-						top: e.pageY - 20 - autoH,
-						left: e.pageX - 13
+						top: e.pageY - autoH,
+						left: e.pageX
 					}).fadeIn(options.fadeSpeed);
 				} else {
 					$dd.css({
@@ -195,22 +219,29 @@ context = (function () {
                 }
             }
 		});
-	}
+	};
 
 	function destroyContext(selector) {
 		$(document).off('contextmenu', selector).off('click', '.context-event');
 	}
-
-	return {
-		init: initialize,
-		settings: updateOptions,
-		attach: addContext,
-		destroy: destroyContext
-	};
+  
+  // allow initialization in constructor
+  if(opts !== undefined) this.init(opts);
+  if(selector !== undefined && menu !== undefined) this.attach(selector, menu);
+  }
+  
+  //$.contextmenu = contextmenu;
+  window.$ = $; // Publish public methods
+  
 })();
 
 var createCallback = function(func) {
-    return function(event) { func(event, currentContextSelector) };
-}
+    return function(event) { 
+        if( event.currentTarget.id !== '' )
+            func( event, { 'id': event.currentTarget.id, 'text': event.currentTarget.textContent, selector: currentContextSelector } );
+        else
+            func( event, { selector: currentContextSelector } );
+    };
+};
 
 currentContextSelector = undefined;
