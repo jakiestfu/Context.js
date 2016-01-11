@@ -33,7 +33,9 @@
         </div>
         <script>
             $.contextmenu('#PNG_JPG', test_menu, {trigger: 'left'});
-            $.contextmenu('#NO_OPTIONS', test_menu, {trigger: 'right'});
+            var menu = $.contextmenu();
+            menu.init( {trigger: 'right'} );
+            menu.attach('#NO_OPTIONS',test_menu2);
             $.contextmenu('#notDynamic', test_menu2, {compress:true, trigger: 'right', onMenu: function(){alert('this is a onMenu warning')}});
         </script>
     </body>

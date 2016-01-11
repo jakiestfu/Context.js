@@ -228,6 +228,8 @@
   // allow initialization in constructor
   if(opts !== undefined) this.init(opts);
   if(selector !== undefined && menu !== undefined) this.attach(selector, menu);
+  
+  return this;
   }
   
   //$.contextmenu = contextmenu;
