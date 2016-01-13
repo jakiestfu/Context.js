@@ -1,5 +1,5 @@
 exampleMenuItemSource = function (selector) {
-    if ($(selector).attr('id') == 'PNG_JPG') {
+    if ($(selector).attr('id') == 'PNG_JPG' || $(selector).attr('id') == 'NO_OPTIONS') {
         return [
                 {
                     header: 'Example Dynamic'

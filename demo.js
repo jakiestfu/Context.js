@@ -1,13 +1,13 @@
 $(document).ready(function(){
 
-	$.contextmenu('body', [
+	$('body').contextmenu([
 
 		{header: 'Download'},
 		{text: 'The Script', subMenu: [
 			{header: 'Requires jQuery'},
 			{text: 'context.js', href: 'http://lab.jakiestfu.com/contextjs/context.js', target:'_blank', action: function(e){
 				_gaq.push(['_trackEvent', 'ContextJS Download', this.pathname, this.innerHTML]);
-			}}
+			}, icon: 'ui-icon ui-icon-arrowthickstop-1-s'}
 		]},
 		{text: 'The Styles', subMenu: [
 
@@ -52,6 +52,6 @@ $(document).ready(function(){
 				]}
 			]}
 		]}
-	], {preventDoubleContext: false, trigger:'right'});
+	], {preventDoubleContext: false, trigger:'right', compress: true});
 
 });

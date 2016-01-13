@@ -13,27 +13,6 @@
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
 }
-.dropdown-context:before, .dropdown-context-up:before, .dropdown-context-left:before {
-    position: absolute;		
-    top: -7px;		
-    left: 9px;		
-    display: inline-block;		
-    border-right: 7px solid transparent;		
-    border-bottom: 7px solid #ccc;		
-    border-left: 7px solid transparent;		
-    border-bottom-color: rgba(0, 0, 0, 0.2);		
-    content: '';		
-}		
-.dropdown-context:after, .dropdown-context-up:after, .dropdown-context-left:after {		
-    position: absolute;		
-    top: -6px;		
-    left: 10px;		
-    display: inline-block;		
-    border-right: 6px solid transparent;		
-    border-bottom: 6px solid #ffffff;		
-    border-left: 6px solid transparent;		
-    content: '';		
-}
 .dropdown-menu {
     position: absolute;
     top: 100%;
@@ -82,7 +61,7 @@
 }
 .dropdown-menu a {
     display: block;
-    padding: 3px 20px;
+    padding: 2px 10px;
     clear: both;
     font-weight: normal;
     line-height: 20px;
@@ -168,12 +147,12 @@
     float: right;
     width: 0;
     height: 0;
-    margin-top: 5px;
+    margin-top: 3px;
     margin-right: -10px;
     border-color: transparent;
-    border-left-color: #cccccc;
+    border-left-color: #aaaaaa;
     border-style: solid;
-    border-width: 5px 0 5px 5px;
+    border-width: 4px 0 4px 4px;
     content: " ";
 }
 .dropdown-submenu:hover > a:after {
@@ -221,9 +200,36 @@
 .dropdown-context .dropdown-submenu:hover > .dropdown-menu {
     display: block;
 }
-
+.dropdown-menu.compressed-context >li.dropdown-submenu > a:after {
+    display: block;
+    float: right;
+    width: 0;
+    height: 0;
+    margin-top: 5px;
+    margin-right: 0px;
+    border-color: transparent;
+    border-left-color: #999999;
+    border-style: solid;
+    border-width: 4px 0 4px 4px;
+    content: " ";
+}
+.dropdown-submenu > .dropdown-menu.compressed-context{
+    top: 5px;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px 6px;
+    border-radius: 0 6px 6px 6px;
+}
+.dropdown-menu.compressed-context {
+    padding: 1px 1px 1px 1px;
+}
+.dropdown-menu.compressed-context li a{
+    padding: 2px 5px 2px 5px;
+}
 .compressed-context a{
-    padding-left: 14px;
+    padding-left: 0px;
     padding-top: 0;
     padding-bottom: 0;
     font-size: 13px;
@@ -232,9 +238,8 @@
     margin: 5px 1px;
     }
 .compressed-context .nav-header{
-    padding:1px 13px;
+    padding:1px 0px;
     }
-
 .dynamic-menu-src {
     display: none;
 }

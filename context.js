@@ -6,10 +6,11 @@
  * Modified by Joshua Christman and Oscar Menendez
  */
 
-(function(){
-  $.contextmenu = function(selector, menu, opts) {
+(function($){
+  $.fn.contextmenu = function(menu, opts) {
 
   //var testThis = $(this);
+  	var selector = $(this); 
   
 	var options = {
 		fadeSpeed: 100,
@@ -227,7 +228,7 @@
   
   // allow initialization in constructor
   if(opts !== undefined) this.init(opts);
-  if(selector !== undefined && menu !== undefined) this.attach(selector, menu);
+  if(selector !== undefined && menu !== undefined) this.attach(selector.selector, menu);
   
   return this;
   }
@@ -235,7 +236,7 @@
   //$.contextmenu = contextmenu;
   window.$ = $; // Publish public methods
   
-})();
+})(jQuery);
 
 var createCallback = function(func) {
     return function(event) { 
