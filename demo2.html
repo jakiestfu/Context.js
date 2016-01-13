@@ -20,6 +20,19 @@
         </style>
     </head>
     <body>
+        <ul class="dropdown-menu dropdown-context" id="myMenu" style="display: none;">
+            <li id="edit">
+                <a>
+                    <span class="text">Edit</span>
+                </a>
+            </li>
+            <li id="create2id">
+                <a>
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span class="text">Create</span>
+                </a>
+            </li>
+        </ul>
         <div id="rightClick" style="position: absolute; top: 0; left: 0; height: 50%; width: 100%;">
             <div id="PNG_JPG" style="position: absolute; top: 0; left:0; height: 100%; width: 50%; background: lime;">
                 Right click here for dynamic menu with PNG/JPG as options.
@@ -32,10 +45,15 @@
             Right click here is not dynamic.
         </div>
         <script>
+            var action = function(event, item){
+                alert('Item clicked: ' + item.text + ', with ID: ' + item.id);
+            }
+            myMenuBindings = {'create2id':action, 'edit':action};
+            
             $('#PNG_JPG').contextmenu( test_menu, {trigger: 'left', compress:true});
             var menu = $('#NO_OPTIONS').contextmenu();
             menu.init( {trigger: 'right'} );
-            menu.attach('#NO_OPTIONS',test_menu2);
+            menu.attach('#NO_OPTIONS', 'myMenu', myMenuBindings);
             $('#notDynamic').contextmenu(test_menu2, {compress:true, trigger: 'right', onMenu: function(){console.log('this is a onMenu test')}});
         </script>
     </body>

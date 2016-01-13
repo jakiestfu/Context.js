@@ -112,13 +112,13 @@
 				if (typeof data[i].subMenu !== 'undefined') {
                     var sub_menu = '<li class="dropdown-submenu';
                     sub_menu += (addDynamicTag) ? ' dynamic-menu-item' : '';
-                    sub_menu += '"><a tabindex="-1" href="' + data[i].href + '">' + data[i].text + '</a></li>';
+                    sub_menu += '"><a tabindex="-1" href="' + data[i].href + '"><span class="text">' + data[i].text + '</span></a></li>';
 					$sub = (sub_menu);
 				} else {
                     var element = '<li';
                     element += (addDynamicTag) ? ' class="dynamic-menu-item"' : '';
                     if(data[i].id !== undefined){
-                      element += '><a id="' + data[i].id + '" tabindex="-1" href="' + data[i].href + '"'+linkTarget+'>';
+                      element += ' id="' + data[i].id + '"><a tabindex="-1" href="' + data[i].href + '"'+linkTarget+'>';
                     }
                     else{
                       element += '><a tabindex="-1" href="' + data[i].href + '"'+linkTarget+'>';
@@ -126,13 +126,12 @@
                     
                     if (typeof data[i].icon !== 'undefined')
                         element += '<span class="' + data[i].icon + '"></span>';
-                    element += data[i].text + '</a></li>';
+                    element += '<span class="text">' + data[i].text + '</span></a></li>';
 					$sub = $(element);
 				}
 				if (typeof data[i].action !== 'undefined') {
                     $action = data[i].action;
 					$sub
-						.find('a')
 						.addClass('context-event')
 						.on('click', createCallback($action));
 				}
@@ -149,21 +148,31 @@
         return $menu;
     }
 
-	this.attach = function(selector, data) {
-        if (typeof data.id !== 'undefined' && typeof data.data !== 'undefined') {
+	this.attach = function(selector, data, bindings) {
+		if(typeof data === 'string' && bindings !== undefined){
+			$menu = $('body').find('#' + data)[0];
+			bindMenu(selector, $menu);
+			bindActions($menu, bindings);
+		}
+		else if(typeof data === 'string'){
+			$menu = $('body').find('#' + data)[0];
+			bindMenu(selector, $menu);
+		}
+        else if (typeof data.id !== 'undefined' && typeof data.data !== 'undefined') {
             var id = data.id;
             $menu = $('body').find('#dropdown-' + id)[0];
             if (typeof $menu === 'undefined') {
                 $menu = buildMenu(data.data, id);
                 $('body').append($menu);
+                bindMenu(selector, $menu, id);
             }
         } else {
             var d = new Date(),
                 id = d.getTime(),
                 $menu = buildMenu(data, id);
                 $('body').append($menu);
+                bindMenu(selector, $menu, id);
         }
-        bindMenu(selector, $menu, id);
 	};
 	
 	function bindMenu(selector, $menu, id){
@@ -178,8 +187,12 @@
 	      }
 	
 				$('.dropdown-context:not(.dropdown-context-sub)').hide();
-	
-				$dd = $('#dropdown-' + id);
+				
+				if(id === undefined){
+					$dd = $('#' + $menu.id);
+				}else{
+					$dd = $('#dropdown-' + id);
+				}
 	
 	            $dd.find('.dynamic-menu-item').remove(); // Destroy any old dynamic menu items
 	            $dd.find('.dynamic-menu-src').each(function(idx, element) {
@@ -225,6 +238,17 @@
 			});
 	}
 	
+	function bindActions($menu, bindings){
+		$.each(bindings, function(itemId, action){
+			$item = ($('#' + $menu.id + ' > #' + itemId).length > 0)?$('#' + $menu.id + ' > #' + itemId):undefined;
+			if($item !== undefined){
+				$item
+					.addClass('context-event')
+					.on('click', createCallback(action));
+			}
+		});
+	}
+	
 	function destroyContext(selector) {
 		$(document).off('contextmenu', selector).off('click', '.context-event');
 	}
@@ -243,9 +267,10 @@
 
 var createCallback = function(func) {
     return function(event) { 
-        if( event.currentTarget.id !== '' )
-            func( event, { 'id': event.currentTarget.id, 'text': event.currentTarget.textContent, selector: currentContextSelector[0] } );
-        else
+        if( event.currentTarget.id !== '' ){
+        	var text = $(event.currentTarget).find("span.text")[0].textContent;
+            func( event, { 'id': event.currentTarget.id, 'text': text, selector: currentContextSelector[0] } );
+        }else
             func( event, { selector: currentContextSelector[0] } );
     };
 };
