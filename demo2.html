@@ -36,7 +36,7 @@
             var menu = $('#NO_OPTIONS').contextmenu();
             menu.init( {trigger: 'right'} );
             menu.attach('#NO_OPTIONS',test_menu2);
-            $('#notDynamic').contextmenu(test_menu2, {compress:true, trigger: 'right', onMenu: function(){alert('this is a onMenu warning')}});
+            $('#notDynamic').contextmenu(test_menu2, {compress:true, trigger: 'right', onMenu: function(){console.log('this is a onMenu test')}});
         </script>
     </body>
 </html>

@@ -3,13 +3,13 @@
  * Copyright Jacob Kelley
  * MIT License
  * repo: https://github.com/jakiestfu/Context.js
+ * This version is a fork, and can be seen at: https://github.com/Menendez-Oscar/Context.js
  * Modified by Joshua Christman and Oscar Menendez
  */
 
 (function($){
   $.fn.contextmenu = function(menu, opts) {
 
-  //var testThis = $(this);
   	var selector = $(this); 
   
 	var options = {
@@ -163,65 +163,68 @@
                 $menu = buildMenu(data, id);
                 $('body').append($menu);
         }
-
+        bindMenu(selector, $menu, id);
+	};
+	
+	function bindMenu(selector, $menu, id){
 		$(selector).on(hash.trigger, function (e) {
-			e.preventDefault();
-			e.stopPropagation();
-
-      currentContextSelector = $(this);
-      
-      if(hash.onMenu !== undefined){ 
-          hash.onMenu(e);
-      }
-
-			$('.dropdown-context:not(.dropdown-context-sub)').hide();
-
-			$dd = $('#dropdown-' + id);
-
-            $dd.find('.dynamic-menu-item').remove(); // Destroy any old dynamic menu items
-            $dd.find('.dynamic-menu-src').each(function(idx, element) {
-                var menuItems = window[$(element).attr('data-src')]($(selector));
-                $parentMenu = $(element).closest('.dropdown-menu.dropdown-context');
-                $parentMenu = buildMenuItems($parentMenu, menuItems, id, undefined, true);
-            });
-
-			if (typeof options.above == 'boolean' && options.above) {
-				$dd.addClass('dropdown-context-up').css({
-					top: e.pageY - $('#dropdown-' + id).height(),
-					left: e.pageX
-				}).fadeIn(options.fadeSpeed);
-			} else if (typeof options.above == 'string' && options.above == 'auto') {
-				$dd.removeClass('dropdown-context-up');
-				var autoH = $dd.height() + 12;
-				if ((e.pageY + autoH) > $(window).height()) {
+				e.preventDefault();
+				e.stopPropagation();
+	
+	      currentContextSelector = $(this);
+	      
+	      if(hash.onMenu !== undefined){ 
+	          hash.onMenu(e);
+	      }
+	
+				$('.dropdown-context:not(.dropdown-context-sub)').hide();
+	
+				$dd = $('#dropdown-' + id);
+	
+	            $dd.find('.dynamic-menu-item').remove(); // Destroy any old dynamic menu items
+	            $dd.find('.dynamic-menu-src').each(function(idx, element) {
+	                var menuItems = window[$(element).attr('data-src')]($(selector));
+	                $parentMenu = $(element).closest('.dropdown-menu.dropdown-context');
+	                $parentMenu = buildMenuItems($parentMenu, menuItems, id, undefined, true);
+	            });
+	
+				if (typeof options.above == 'boolean' && options.above) {
 					$dd.addClass('dropdown-context-up').css({
-						top: e.pageY - autoH,
+						top: e.pageY - $('#dropdown-' + id).height(),
 						left: e.pageX
 					}).fadeIn(options.fadeSpeed);
-				} else {
-					$dd.css({
-						top: e.pageY + 10,
-						left: e.pageX - 13
-					}).fadeIn(options.fadeSpeed);
+				} else if (typeof options.above == 'string' && options.above == 'auto') {
+					$dd.removeClass('dropdown-context-up');
+					var autoH = $dd.height() + 12;
+					if ((e.pageY + autoH) > $(window).height()) {
+						$dd.addClass('dropdown-context-up').css({
+							top: e.pageY - autoH,
+							left: e.pageX
+						}).fadeIn(options.fadeSpeed);
+					} else {
+						$dd.css({
+							top: e.pageY + 10,
+							left: e.pageX - 13
+						}).fadeIn(options.fadeSpeed);
+					}
 				}
-			}
-
-            if (typeof options.left == 'boolean' && options.left) {
-                $dd.addClass('dropdown-context-left').css({
-                    left: e.pageX - $dd.width()
-                }).fadeIn(options.fadeSpeed);
-            } else if (typeof options.left == 'string' && options.left == 'auto') {
-                $dd.removeClass('dropdown-context-left');
-                var autoL = $dd.width() - 12;
-                if ((e.pageX + autoL) > $('html').width()) {
-                    $dd.addClass('dropdown-context-left').css({
-                        left: e.pageX - $dd.width() + 13
-                    });
-                }
-            }
-		});
-	};
-
+	
+	            if (typeof options.left == 'boolean' && options.left) {
+	                $dd.addClass('dropdown-context-left').css({
+	                    left: e.pageX - $dd.width()
+	                }).fadeIn(options.fadeSpeed);
+	            } else if (typeof options.left == 'string' && options.left == 'auto') {
+	                $dd.removeClass('dropdown-context-left');
+	                var autoL = $dd.width() - 12;
+	                if ((e.pageX + autoL) > $('html').width()) {
+	                    $dd.addClass('dropdown-context-left').css({
+	                        left: e.pageX - $dd.width() + 13
+	                    });
+	                }
+	            }
+			});
+	}
+	
 	function destroyContext(selector) {
 		$(document).off('contextmenu', selector).off('click', '.context-event');
 	}
@@ -241,9 +244,9 @@
 var createCallback = function(func) {
     return function(event) { 
         if( event.currentTarget.id !== '' )
-            func( event, { 'id': event.currentTarget.id, 'text': event.currentTarget.textContent, selector: currentContextSelector } );
+            func( event, { 'id': event.currentTarget.id, 'text': event.currentTarget.textContent, selector: currentContextSelector[0] } );
         else
-            func( event, { selector: currentContextSelector } );
+            func( event, { selector: currentContextSelector[0] } );
     };
 };
 
