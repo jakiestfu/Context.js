@@ -6,6 +6,10 @@
 .dropdown-context .nav-header{
 	cursor:default;
 	}
+.context-event span{
+    display:inline-block; 
+    margin-right:10px;
+}
 .dropdown-context:before, .dropdown-context-up:before, .dropdown-context-left:before {
 	position: absolute;
 	top: -7px;
